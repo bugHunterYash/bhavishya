@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhavishya — Product Requirements Document</title>
+<style>
+  :root{--ink:#17202a;--muted:#5f6b76;--line:#dfe5ea;--bg:#f5f7f9;--card:#fff;--accent:#173f5f}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
+  .page{max-width:1100px;margin:40px auto;background:var(--card);padding:64px 72px;box-shadow:0 8px 40px #0000000d}
+  h1{font-size:42px;line-height:1.1;margin:0 0 12px;color:var(--accent)}
+  h2{font-size:27px;margin:48px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--line);color:var(--accent)}
+  h3{font-size:20px;margin:30px 0 10px}.subtitle{font-size:18px;color:var(--muted)}
+  .meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:28px 0}
+  .meta div,.callout{border:1px solid var(--line);padding:14px 16px;border-radius:10px;background:#fafbfc}
+  .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin:18px 0 28px;font-size:14px}
+  th,td{border:1px solid var(--line);padding:10px 12px;vertical-align:top;text-align:left}th{background:#f1f4f6}
+  code{background:#f0f2f4;padding:2px 5px;border-radius:4px;font-size:.9em}
+  pre{background:#111827;color:#e5e7eb;padding:18px;border-radius:10px;overflow:auto;font-size:12px;line-height:1.55}
+  ul,ol{padding-left:24px}.must{font-weight:700}.small{color:var(--muted);font-size:13px}
+  .pagebreak{page-break-before:always}
+  @media print{body{background:white}.page{box-shadow:none;margin:0;max-width:none;padding:40px}.pagebreak{page-break-before:always}}
+</style>
+</head>
+<body>
+<main class="page">
+
+<h1>BHAVISHYA</h1>
+<p class="subtitle"><strong>Unified School–Parent–Student Experience Platform</strong><br>
+Product Requirements Document (PRD) • Pitch / Prototype Edition</p>
+
+<div class="meta">
+  <div><span class="label">Product</span><br>Bhavishya</div>
+  <div><span class="label">Document</span><br>Complete Product Requirements Document</div>
+  <div><span class="label">Primary market</span><br>Schools, parents, students and school administrators</div>
+  <div><span class="label">Prototype target</span><br>10 schools • 10 students per school • 2–3 teachers per school</div>
+  <div><span class="label">Primary design goal</span><br>Premium, calm, human-made, highly usable UI</div>
+  <div><span class="label">Document status</span><br>Prototype / Pitch-ready specification</div>
+</div>
+
+<div class="callout">
+<strong>One-line product definition:</strong> Bhavishya is a multi-school digital platform that brings a student's school life into one secure parent-first experience—identity, attendance, academics, timetable, fees, transport, RFID events, cafeteria activity, notifications and structured parent communities.
+</div>
+
+<h2>1. Executive Summary</h2>
+<p>Bhavishya is designed as a unified school operating and parent-engagement platform rather than another attendance-only application. A school can operate its own isolated tenant inside Bhavishya, while parents receive a simple dashboard showing the information that matters to them about their child.</p>
+<p>The prototype must demonstrate that the same platform can support multiple schools without mixing their data. A principal should see only their school. A teacher should see only the classes and students assigned to them. A parent should see only their linked child or children. A student should see their own academic and school information.</p>
+<p>The product should feel like a real commercial product, not a hackathon dashboard: restrained colour usage, strong typography, generous whitespace, clear information hierarchy, meaningful empty states, realistic data and purposeful interactions.</p>
+
+<h2>2. Problem Statement</h2>
+<ul>
+<li>Parents often receive school information through multiple disconnected channels.</li>
+<li>Attendance, fees, academic records, transport and school communications may live in separate systems.</li>
+<li>Parents lack one simple place to understand what happened to their child during the school day.</li>
+<li>School administrators need a consolidated operational view across students, teachers, attendance and payments.</li>
+<li>Class-level parent communication can become noisy when handled through generic chat applications.</li>
+<li>As schools grow, data isolation becomes critical: one school's students, teachers and records must never appear inside another school's tenant.</li>
+</ul>
+
+<h2>3. Product Vision</h2>
+<p><strong>“A calmer way for schools and families to stay connected to a child's everyday school journey.”</strong></p>
+<p>Bhavishya should reduce uncertainty for parents while giving schools a structured digital operating layer.</p>
+
+<h2>4. Product Principles</h2>
+<ol>
+<li><strong>Parent-first:</strong> important information should be understandable within seconds.</li>
+<li><strong>Useful over decorative:</strong> every card, chart and interaction must have a purpose.</li>
+<li><strong>Calm visual system:</strong> no excessive gradients, glow effects, glassmorphism or “AI-generated dashboard” aesthetics.</li>
+<li><strong>Human-made feel:</strong> deliberate spacing, typography, copywriting and interaction states.</li>
+<li><strong>Privacy by design:</strong> role-based access and tenant isolation are core architecture requirements.</li>
+<li><strong>Progressive disclosure:</strong> show the most important information first; details appear when requested.</li>
+<li><strong>Realistic demo:</strong> demo data must behave like real school data, not random placeholder text.</li>
+</ol>
+
+<h2>5. Users & Roles</h2>
+<table>
+<tr><th>Role</th><th>Primary responsibility</th><th>Access</th></tr>
+<tr><td>Super Admin</td><td>Platform-level management</td><td>All onboarded schools, system configuration and support operations</td></tr>
+<tr><td>Principal / School Admin</td><td>Operate a school</td><td>Only their school's students, teachers, classes, attendance, fees, transport and communities</td></tr>
+<tr><td>Teacher</td><td>Teach and record classroom activity</td><td>Assigned classes, subjects, attendance and teaching records</td></tr>
+<tr><td>Parent</td><td>Monitor child and communicate with school</td><td>Only linked child/children and permitted class communities</td></tr>
+<tr><td>Student</td><td>View own school life</td><td>Own academic, timetable, attendance, ID and relevant school records</td></tr>
+<tr><td>Transport Staff</td><td>Operate / update bus journeys</td><td>Assigned route, vehicle and boarding events</td></tr>
+<tr><td>Cafeteria Staff</td><td>Process cafeteria purchases</td><td>Assigned cafeteria transactions only</td></tr>
+</table>
+
+<h2>6. Core Modules</h2>
+<table>
+<tr><th>Module</th><th>Purpose</th><th>MVP</th></tr>
+<tr><td>Authentication & Identity</td><td>Secure login with role-aware routing</td><td>Yes</td></tr>
+<tr><td>School / Tenant Management</td><td>Isolate multiple schools</td><td>Yes</td></tr>
+<tr><td>Parent Dashboard</td><td>Single overview of child's school day</td><td>Yes</td></tr>
+<tr><td>Student Profile</td><td>Identity, academics and activity</td><td>Yes</td></tr>
+<tr><td>Attendance</td><td>Daily and historical attendance</td><td>Yes</td></tr>
+<tr><td>Academic Records</td><td>Marks, report cards and uploaded documents</td><td>Yes</td></tr>
+<tr><td>Timetable</td><td>Current and upcoming classes</td><td>Yes</td></tr>
+<tr><td>Teacher Dashboard</td><td>Classes, attendance and teaching logs</td><td>Yes</td></tr>
+<tr><td>Principal Dashboard</td><td>School-level operational overview</td><td>Yes</td></tr>
+<tr><td>Fees & Payments</td><td>Fee status and payment history</td><td>Yes</td></tr>
+<tr><td>RFID / Smart ID Events</td><td>Entry, exit and cafeteria identification</td><td>Demo</td></tr>
+<tr><td>Transport Tracking</td><td>Bus status, route and child boarding</td><td>Demo</td></tr>
+<tr><td>Cafeteria</td><td>Purchases and spending visibility</td><td>Demo</td></tr>
+<tr><td>Notifications</td><td>Important event alerts</td><td>Yes</td></tr>
+<tr><td>Parent Community</td><td>Structured class-level discussions</td><td>Yes</td></tr>
+</table>
+
+<h2>7. Parent Experience</h2>
+<h3>7.1 Parent Home</h3>
+<p>The home screen is the product's most important screen. It should answer, at a glance:</p>
+<ul>
+<li>Is my child in school?</li>
+<li>What class is happening now?</li>
+<li>How is today's attendance?</li>
+<li>Is there anything I need to act on?</li>
+<li>Is the school bus on its route?</li>
+<li>Are fees pending?</li>
+</ul>
+<p>Recommended hierarchy: child selector → current school-day status → important alert → today's timeline → academics → fees → transport → cafeteria → community.</p>
+
+<h3>7.2 Child Timeline</h3>
+<p>A chronological school-day timeline can combine verified events:</p>
+<ol>
+<li>Bus boarded — 07:42</li>
+<li>School entry recorded — 08:18</li>
+<li>Period 1 — Mathematics</li>
+<li>Period 2 — Science</li>
+<li>Cafeteria purchase — 12:41</li>
+<li>Period 5 — English</li>
+<li>School exit recorded — 15:08</li>
+</ol>
+<p>Every event must have a source/type and timestamp. Do not fake “live” events without clearly marking the prototype simulation.</p>
+
+<h3>7.3 Attendance</h3>
+<ul>
+<li>Today status: Present / Absent / Late / Not recorded.</li>
+<li>Monthly calendar.</li>
+<li>Attendance percentage.</li>
+<li>Subject-level attendance where enabled.</li>
+<li>Absence notification to the parent.</li>
+<li>Principal can inspect school-wide attendance.</li>
+</ul>
+
+<h3>7.4 Academic Records</h3>
+<ul>
+<li>Exam list.</li>
+<li>Subject-wise marks.</li>
+<li>Percentage / grade where applicable.</li>
+<li>Report card view.</li>
+<li>Previous report cards.</li>
+<li>Uploaded marksheets / documents.</li>
+</ul>
+
+<h3>7.5 Fees</h3>
+<ul>
+<li>Total fee amount.</li>
+<li>Paid amount.</li>
+<li>Pending amount.</li>
+<li>Due date.</li>
+<li>Payment history and receipt.</li>
+<li>Clear CTA for online payment in production.</li>
+</ul>
+
+<h3>7.6 Transport</h3>
+<ul>
+<li>Assigned bus and route.</li>
+<li>Bus status.</li>
+<li>Last verified boarding event.</li>
+<li>Estimated arrival information when real GPS is available.</li>
+<li>Map screen for authorized parents only.</li>
+</ul>
+
+<h3>7.7 Cafeteria</h3>
+<ul>
+<li>Purchase date/time.</li>
+<li>Item name.</li>
+<li>Amount.</li>
+<li>Daily/monthly spending summary.</li>
+<li>Payment method / school wallet where applicable.</li>
+</ul>
+
+<h2>8. Parent Community</h2>
+<p>The community is deliberately <strong>not</strong> a WhatsApp replacement. It is a structured school communication layer.</p>
+<h3>Core concept</h3>
+<p>Each class can have a private community such as <code>Class 8-A • Parent Community</code>. Only authorized parents and school staff can participate.</p>
+<h3>Post types</h3>
+<ul>
+<li>Question</li>
+<li>Announcement</li>
+<li>Issue / Concern</li>
+<li>Suggestion</li>
+<li>Event / Activity</li>
+<li>Poll</li>
+</ul>
+<h3>Professional behaviour</h3>
+<ul>
+<li>No uncontrolled direct messaging between all members by default.</li>
+<li>Posts have categories, timestamps and status.</li>
+<li>Issue posts can be marked Open → Under Review → Resolved.</li>
+<li>School staff can respond officially.</li>
+<li>Important announcements can be pinned.</li>
+<li>Moderation and reporting tools are required for production.</li>
+</ul>
+
+<h2>9. Teacher Experience</h2>
+<ul>
+<li>Today's schedule.</li>
+<li>Assigned classes and subjects.</li>
+<li>Take attendance.</li>
+<li>View class roster.</li>
+<li>Record lesson topic.</li>
+<li>View previous teaching logs.</li>
+<li>See relevant parent/community questions.</li>
+</ul>
+<p>Example teaching record: <code>Class 8-A → Science → Topic: Force and Pressure → Period 3 → 10:20–11:00</code>.</p>
+
+<h2>10. Principal / School Admin Experience</h2>
+<p>The principal dashboard should feel operational rather than overloaded.</p>
+<ul>
+<li>Students present / absent today.</li>
+<li>Teachers present / absent today.</li>
+<li>Current school occupancy / activity summary where available.</li>
+<li>Fee collection summary.</li>
+<li>Recent alerts.</li>
+<li>Transport overview.</li>
+<li>Class-wise attendance.</li>
+<li>Search student → open student dashboard.</li>
+<li>Search teacher → open teacher dashboard.</li>
+<li>Community issues requiring school action.</li>
+</ul>
+
+<h2>11. Student Experience</h2>
+<ul>
+<li>Personal profile.</li>
+<li>School ID / digital ID.</li>
+<li>Today's timetable.</li>
+<li>Attendance.</li>
+<li>Marks and report cards.</li>
+<li>Assignments or academic notices if enabled.</li>
+<li>Transport status where permitted.</li>
+</ul>
+
+<h2>12. RFID / Smart ID Architecture</h2>
+<p>The prototype should simulate RFID events rather than claiming actual hardware integration.</p>
+<p>Production concept:</p>
+<pre>RFID Card / NFC / Smart ID
+        ↓
+Reader / Gate Device
+        ↓
+Secure Event API
+        ↓
+Event Processor
+        ↓
+Student + School Tenant Validation
+        ↓
+Attendance / Entry / Cafeteria / Transport Event
+        ↓
+Parent + School Dashboards</pre>
+<p>Every event should store <code>school_id</code>, <code>student_id</code>, event type, timestamp, device/source and verification status.</p>
+
+<h2>13. Transport Tracking</h2>
+<p>Production transport can integrate GPS-enabled school buses. The prototype can use simulated coordinates and a route timeline.</p>
+<ul>
+<li>Bus ID.</li>
+<li>Route ID.</li>
+<li>Driver / assigned staff.</li>
+<li>Current/last known location.</li>
+<li>Route stops.</li>
+<li>Boarding event.</li>
+<li>Drop-off event.</li>
+<li>Trip status.</li>
+</ul>
+<p><strong>Privacy requirement:</strong> precise child location must only be shown to authorized guardians and authorized school personnel, and retention should be limited.</p>
+
+<h2>14. Multi-School / Multi-Tenant Architecture</h2>
+<p>This is a critical requirement. Bhavishya must not be built as ten separate hard-coded projects. It should use one application with strict tenant isolation.</p>
+<pre>Bhavishya Platform
+├── School A (tenant_id)
+│   ├── Students
+│   ├── Parents
+│   ├── Teachers
+│   ├── Classes
+│   ├── Fees
+│   ├── Attendance
+│   └── Communities
+├── School B (tenant_id)
+│   └── ...
+└── School J (tenant_id)
+    └── ...</pre>
+<p>Every tenant-owned database record must carry a school/tenant identifier. Backend authorization must enforce the tenant boundary. Frontend filtering is never sufficient.</p>
+
+<h3>Tenant isolation rules</h3>
+<ul>
+<li>A parent from School A cannot query School B data.</li>
+<li>A teacher from School A cannot open a School B class by changing a URL parameter.</li>
+<li>A principal can only administer their assigned school.</li>
+<li>Super Admin is the only role with cross-school administrative access.</li>
+<li>All sensitive APIs validate both identity and tenant membership.</li>
+<li>Audit logs record sensitive administrative actions.</li>
+</ul>
+
+<h2>15. Suggested Technical Architecture</h2>
+<h3>Frontend</h3>
+<ul>
+<li>React + Vite or Next.js.</li>
+<li>TypeScript.</li>
+<li>Tailwind CSS or a disciplined CSS system.</li>
+<li>Responsive design for desktop, tablet and mobile.</li>
+<li>Component library built specifically for Bhavishya.</li>
+</ul>
+
+<h3>Backend</h3>
+<ul>
+<li>Node.js + TypeScript.</li>
+<li>Express or NestJS.</li>
+<li>REST API initially; event-driven services can be introduced later.</li>
+<li>JWT/session-based authentication with secure refresh strategy.</li>
+</ul>
+
+<h3>Database</h3>
+<p><strong>PostgreSQL</strong> is recommended for the core transactional system because students, parents, schools, classes, fees, attendance and relationships are strongly structured.</p>
+
+<h3>Supporting services</h3>
+<ul>
+<li>Object storage for report cards and documents.</li>
+<li>Redis for caching / queues where needed.</li>
+<li>WebSocket or Server-Sent Events for selected live dashboard updates.</li>
+<li>Maps provider for production transport tracking.</li>
+<li>Payment gateway for production fees.</li>
+<li>Email/SMS/push provider for notifications.</li>
+</ul>
+
+<h2>16. High-Level System Flow</h2>
+<pre>User
+ ↓
+Authentication
+ ↓
+Role + Tenant Resolution
+ ↓
+Authorization Middleware
+ ↓
+Domain API
+ ↓
+PostgreSQL / Event Store / Object Storage
+ ↓
+Notification / Realtime Services
+ ↓
+Role-specific Dashboard</pre>
+
+<h2>17. Database Model</h2>
+<h3>Core tables</h3>
+<table>
+<tr><th>Table</th><th>Important fields</th></tr>
+<tr><td>schools</td><td>id, name, code, address, status, created_at</td></tr>
+<tr><td>users</td><td>id, email/phone, password_hash, role, status</td></tr>
+<tr><td>students</td><td>id, school_id, admission_no, user_id, class_id, name, dob, status</td></tr>
+<tr><td>parents</td><td>id, user_id, school_id, name, contact</td></tr>
+<tr><td>parent_students</td><td>parent_id, student_id, relationship</td></tr>
+<tr><td>teachers</td><td>id, school_id, user_id, employee_code, name</td></tr>
+<tr><td>classes</td><td>id, school_id, name, grade, section, academic_year</td></tr>
+<tr><td>subjects</td><td>id, school_id, name, code</td></tr>
+<tr><td>teacher_assignments</td><td>teacher_id, class_id, subject_id</td></tr>
+<tr><td>timetable_entries</td><td>school_id, class_id, teacher_id, subject_id, day, start_time, end_time</td></tr>
+<tr><td>attendance</td><td>school_id, student_id, date, status, source, marked_by</td></tr>
+<tr><td>lesson_logs</td><td>school_id, teacher_id, class_id, subject_id, topic, date</td></tr>
+<tr><td>exams</td><td>school_id, name, date, academic_year</td></tr>
+<tr><td>marks</td><td>school_id, exam_id, student_id, subject_id, marks, max_marks</td></tr>
+<tr><td>fee_invoices</td><td>school_id, student_id, amount, due_date, status</td></tr>
+<tr><td>payments</td><td>school_id, invoice_id, amount, gateway_ref, status, paid_at</td></tr>
+<tr><td>id_cards</td><td>school_id, student_id, card_uid, status</td></tr>
+<tr><td>school_events</td><td>school_id, student_id, event_type, occurred_at, source</td></tr>
+<tr><td>buses</td><td>school_id, bus_code, route_id, driver_name</td></tr>
+<tr><td>routes</td><td>school_id, name, stops</td></tr>
+<tr><td>bus_events</td><td>school_id, bus_id, student_id, event_type, timestamp</td></tr>
+<tr><td>cafeteria_transactions</td><td>school_id, student_id, item, amount, timestamp</td></tr>
+<tr><td>notifications</td><td>school_id, user_id, type, title, body, read_at</td></tr>
+<tr><td>communities</td><td>school_id, class_id, name, status</td></tr>
+<tr><td>community_members</td><td>community_id, user_id, role</td></tr>
+<tr><td>community_posts</td><td>community_id, author_id, type, title, body, status</td></tr>
+<tr><td>audit_logs</td><td>school_id, actor_id, action, entity_type, entity_id, timestamp</td></tr>
+</table>
+
+<h2>18. Demo Dataset</h2>
+<p>The demo must be realistic enough for a live pitch but small enough to manage manually.</p>
+<h3>Recommended structure</h3>
+<ul>
+<li><strong>10 schools</strong>: School 01 through School 10.</li>
+<li><strong>10 students per school</strong>: 100 students total.</li>
+<li><strong>2–3 teachers per school</strong>: 20–30 teachers total.</li>
+<li>At least 1 principal/admin per school.</li>
+<li>At least 1 parent account per student.</li>
+<li>Multiple classes and subjects per school.</li>
+<li>Attendance history for the last 30 days.</li>
+<li>At least 2–3 examinations with marks.</li>
+<li>Fee invoices with paid, partially paid and pending states.</li>
+<li>Sample RFID events.</li>
+<li>Sample cafeteria purchases.</li>
+<li>Sample bus routes and simulated GPS events.</li>
+<li>Community posts with different statuses.</li>
+</ul>
+
+<h3>Demo users</h3>
+<table>
+<tr><th>Account</th><th>Example purpose</th></tr>
+<tr><td>superadmin@bhavishya.demo</td><td>View all demo schools</td></tr>
+<tr><td>principal.school01@bhavishya.demo</td><td>School 01 administration</td></tr>
+<tr><td>teacher.school01@bhavishya.demo</td><td>Teacher dashboard</td></tr>
+<tr><td>parent.student01@bhavishya.demo</td><td>Parent dashboard</td></tr>
+<tr><td>student.student01@bhavishya.demo</td><td>Student dashboard</td></tr>
+</table>
+<p class="small">Use seeded demo credentials only in the prototype. Never ship shared demo passwords or plaintext credentials into production.</p>
+
+<h2>19. Important Demo Scenarios</h2>
+<ol>
+<li>Parent logs in and sees their child's current status.</li>
+<li>Attendance changes from “Not recorded” to “Present” after a simulated RFID event.</li>
+<li>Parent receives an absence notification when the child is marked absent.</li>
+<li>Parent opens today's timeline and sees class/teacher/subject information.</li>
+<li>Parent opens a report card and views subject marks.</li>
+<li>Parent checks fee status and payment history.</li>
+<li>Parent opens transport and sees a simulated bus route on a map.</li>
+<li>Parent sees a cafeteria transaction.</li>
+<li>Parent posts a concern in the class community and sees status change to “Under Review”.</li>
+<li>Teacher logs in, opens a class and records attendance + lesson topic.</li>
+<li>Principal views school-wide attendance and teacher attendance.</li>
+<li>Principal searches a student and opens their student profile.</li>
+<li>Super Admin switches from School 01 to School 02 and demonstrates that data is isolated.</li>
+</ol>
+
+<h2>20. UX / UI Requirements</h2>
+<p><strong>This is a primary success criterion for the prototype.</strong></p>
+<ul>
+<li>Professional institutional product, not a generic SaaS template.</li>
+<li>Maximum 2–3 primary colours.</li>
+<li>Strong neutral background and restrained accent colour.</li>
+<li>No unnecessary neon, excessive gradients, glow, oversized blobs or decorative 3D graphics.</li>
+<li>Use typography hierarchy rather than colour to create emphasis.</li>
+<li>Cards should group meaningful information, not every tiny statistic.</li>
+<li>Use real labels: “Attendance today”, “Fee due”, “Next class”, etc.</li>
+<li>Mobile-first parent experience.</li>
+<li>Desktop-optimised principal/teacher experience.</li>
+<li>Every screen needs loading, empty, error and success states.</li>
+<li>Tables should be readable and searchable.</li>
+<li>Charts should answer a question rather than merely decorate the page.</li>
+<li>Use subtle motion only when it improves feedback.</li>
+</ul>
+
+<h2>21. Suggested Information Architecture</h2>
+<pre>Bhavishya
+├── Login
+├── Parent
+│   ├── Home
+│   ├── My Child
+│   │   ├── Overview
+│   │   ├── Attendance
+│   │   ├── Academics
+│   │   ├── Timetable
+│   │   ├── Fees
+│   │   ├── Transport
+│   │   ├── Cafeteria
+│   │   └── Digital ID
+│   ├── Notifications
+│   └── Community
+├── Student
+│   ├── Home
+│   ├── Attendance
+│   ├── Academics
+│   ├── Timetable
+│   └── Digital ID
+├── Teacher
+│   ├── Dashboard
+│   ├── Today's Classes
+│   ├── Attendance
+│   ├── Students
+│   └── Lesson Logs
+├── Principal
+│   ├── Overview
+│   ├── Students
+│   ├── Teachers
+│   ├── Attendance
+│   ├── Fees
+│   ├── Transport
+│   └── Communities
+└── Super Admin
+    ├── Schools
+    ├── Users
+    ├── System
+    └── Audit Logs</pre>
+
+<h2>22. Security & Privacy</h2>
+<ul>
+<li>Passwords must be hashed using a modern password hashing algorithm.</li>
+<li>Use secure authentication and authorization middleware.</li>
+<li>Enforce school tenant boundaries server-side.</li>
+<li>Validate all object ownership before returning records.</li>
+<li>Do not expose sensitive identifiers unnecessarily in URLs.</li>
+<li>Encrypt data in transit and use encrypted storage where appropriate.</li>
+<li>Use audit logs for administrative changes.</li>
+<li>Apply least-privilege access.</li>
+<li>Protect report cards and personal documents with authorized, expiring access.</li>
+<li>Do not expose precise child location to unauthorized users.</li>
+<li>Define retention policies for location, RFID and transaction data.</li>
+<li>Production deployment must be reviewed for applicable Indian privacy/data-protection obligations and school policies.</li>
+</ul>
+
+<h2>23. API Design</h2>
+<pre>POST   /api/auth/login
+POST   /api/auth/logout
+GET    /api/me
+
+GET    /api/schools/:schoolId/dashboard
+GET    /api/students/:studentId
+GET    /api/students/:studentId/attendance
+GET    /api/students/:studentId/academics
+GET    /api/students/:studentId/timetable
+GET    /api/students/:studentId/fees
+GET    /api/students/:studentId/transport
+GET    /api/students/:studentId/cafeteria
+
+POST   /api/attendance/mark
+GET    /api/classes/:classId/attendance
+
+GET    /api/teachers/:teacherId/classes
+POST   /api/lesson-logs
+
+GET    /api/communities
+POST   /api/communities/:id/posts
+PATCH  /api/community-posts/:id/status
+
+GET    /api/buses/:busId/status
+POST   /api/events/rfid
+POST   /api/cafeteria/transactions
+
+GET    /api/notifications
+PATCH  /api/notifications/:id/read</pre>
+
+<h2>24. Non-Functional Requirements</h2>
+<table>
+<tr><th>Area</th><th>Requirement</th></tr>
+<tr><td>Performance</td><td>Dashboard should feel responsive; use caching and pagination where appropriate.</td></tr>
+<tr><td>Scalability</td><td>Architecture must support additional schools without duplicating application code.</td></tr>
+<tr><td>Reliability</td><td>Critical attendance/payment events must be persisted and traceable.</td></tr>
+<tr><td>Accessibility</td><td>Readable contrast, keyboard support for admin interfaces, semantic controls.</td></tr>
+<tr><td>Responsive</td><td>Parent experience must work well on common Android phones.</td></tr>
+<tr><td>Observability</td><td>Structured logs, error tracking and audit logs.</td></tr>
+<tr><td>Maintainability</td><td>Type-safe domain models, modular APIs and reusable UI components.</td></tr>
+</table>
+
+<h2>25. MVP vs Future Roadmap</h2>
+<table>
+<tr><th>MVP / Pitch</th><th>Future production</th></tr>
+<tr><td>10-school seeded dataset</td><td>Real school onboarding</td></tr>
+<tr><td>Simulated RFID events</td><td>Real RFID/NFC hardware integration</td></tr>
+<tr><td>Simulated bus location</td><td>Live GPS hardware integration</td></tr>
+<tr><td>Demo payment records</td><td>Payment gateway reconciliation</td></tr>
+<tr><td>Parent community</td><td>Moderation workflows and escalation</td></tr>
+<tr><td>Basic notifications</td><td>Push/SMS/email orchestration</td></tr>
+<tr><td>Basic academics</td><td>Assignments, homework and learning analytics</td></tr>
+<tr><td>Single-school admin controls</td><td>Full SaaS school onboarding and billing</td></tr>
+</table>
+
+<h2>26. Product Metrics</h2>
+<ul>
+<li>Parent weekly active users.</li>
+<li>Percentage of parents checking dashboard after a school-day event.</li>
+<li>Attendance notification delivery/open rate.</li>
+<li>Fee payment completion rate.</li>
+<li>Average time to find today's child status.</li>
+<li>Community issue resolution time.</li>
+<li>Teacher attendance-record completion rate.</li>
+<li>Transport event reliability.</li>
+</ul>
+
+<h2>27. Demo / Pitch Story</h2>
+<p>The recommended live demonstration should follow one child's day instead of jumping randomly between features.</p>
+<ol>
+<li><strong>Morning:</strong> child boards the bus → parent sees boarding event.</li>
+<li><strong>Arrival:</strong> RFID entry → attendance becomes Present.</li>
+<li><strong>School day:</strong> parent sees current class, subject and teacher.</li>
+<li><strong>Lunch:</strong> cafeteria purchase appears in the timeline.</li>
+<li><strong>Academics:</strong> parent opens marks/report card.</li>
+<li><strong>Issue:</strong> a parent posts a structured concern in the class community.</li>
+<li><strong>Afternoon:</strong> bus tracking shows the return journey.</li>
+<li><strong>Administration:</strong> principal sees the school-wide attendance overview.</li>
+<li><strong>Scale proof:</strong> switch school tenant and demonstrate completely separate data.</li>
+</ol>
+
+<h2>28. Acceptance Criteria</h2>
+<ul>
+<li>Users can log in according to their role.</li>
+<li>Every school has isolated demo data.</li>
+<li>Parent cannot access an unrelated student's records.</li>
+<li>Teacher can view assigned classes and record attendance.</li>
+<li>Principal can view school-level student and teacher attendance.</li>
+<li>Parent can view attendance, academics, timetable, fees, transport and cafeteria records.</li>
+<li>Attendance events generate appropriate notifications.</li>
+<li>Community posts can be created and moved through an issue-resolution state.</li>
+<li>Demo RFID, bus and cafeteria flows work end-to-end.</li>
+<li>All major screens have loading, empty, error and success states.</li>
+<li>UI works on mobile and desktop.</li>
+<li>No feature relies on hard-coded UI-only data once the demo seed database is initialized.</li>
+</ul>
+
+<h2>29. Important Product Boundaries</h2>
+<ul>
+<li>Do not describe simulated GPS as real GPS.</li>
+<li>Do not describe simulated RFID as physical RFID integration.</li>
+<li>Do not claim Bhavishya is the first or only platform of its kind without market research.</li>
+<li>Do not expose real children's personal information in a public demo.</li>
+<li>Do not use production-looking credentials in a public repository.</li>
+<li>Do not build the community as an unrestricted social network.</li>
+</ul>
+
+<h2>30. Build Order</h2>
+<ol>
+<li>Design system + responsive shell.</li>
+<li>Authentication and role routing.</li>
+<li>School tenant model.</li>
+<li>Database schema + seed system.</li>
+<li>Parent dashboard.</li>
+<li>Student profile + academics + attendance.</li>
+<li>Teacher dashboard.</li>
+<li>Principal dashboard.</li>
+<li>Fees.</li>
+<li>Notifications.</li>
+<li>Community.</li>
+<li>RFID event simulator.</li>
+<li>Transport map simulator.</li>
+<li>Cafeteria module.</li>
+<li>Cross-tenant security testing.</li>
+<li>Final polish, empty/error states and pitch demo flow.</li>
+</ol>
+
+<h2>31. Seed Data Requirements for Opus / Implementation Agent</h2>
+<p>Create deterministic seed data so every demo run is reproducible.</p>
+<ul>
+<li>10 unique school tenants with realistic names, codes and academic years.</li>
+<li>10 students per school.</li>
+<li>At least 2 parents linked to selected students to demonstrate multiple guardians.</li>
+<li>2–3 teachers per school.</li>
+<li>At least 2 classes per school.</li>
+<li>At least 4 subjects per school.</li>
+<li>30 days of attendance records.</li>
+<li>2–3 exams and subject marks.</li>
+<li>Fee invoices across paid, partial and pending states.</li>
+<li>Transport routes, buses and event history.</li>
+<li>Cafeteria transaction history.</li>
+<li>Notifications with read/unread states.</li>
+<li>Community posts across Question, Announcement, Issue and Suggestion types.</li>
+</ul>
+
+<h2>32. Final Design Direction</h2>
+<div class="callout">
+<p><strong>Bhavishya should look like a serious education product.</strong></p>
+<p>Think: premium institutional software + excellent mobile banking clarity + modern education product usability. Avoid: flashy startup landing-page aesthetics, excessive cards, rainbow charts, neon gradients, fake 3D illustrations and generic AI-dashboard patterns.</p>
+<p>The interface should make a parent feel: <strong>“I immediately understand what is happening with my child.”</strong></p>
+</div>
+
+<h2>33. Instruction for the Implementation / Design Agent</h2>
+<p>When using this PRD as the implementation brief, do not build a superficial static mockup. Build a functional prototype with a real database schema, seeded demo data, role-aware navigation, tenant-aware APIs, realistic state transitions and polished responsive UI.</p>
+<p>Prioritize the quality of the parent dashboard and the multi-school architecture. The ten-school dataset exists to prove scalability and tenant separation, not to create ten different frontends.</p>
+<p>Use reusable components and data-driven screens. A change to seeded data should automatically be reflected in the relevant dashboard. Avoid hard-coded statistics, names, attendance percentages, fee totals and timeline events in UI components.</p>
+
+<h2>34. Definition of Done</h2>
+<p>Bhavishya is considered pitch-ready when a reviewer can open the application, select a role, log in, understand the interface without explanation, follow one student's school-day journey, inspect the relevant records, interact with a parent community, open the principal dashboard and switch between at least two school tenants without seeing cross-school data.</p>
+
+<p class="small" style="margin-top:60px">Bhavishya PRD • Prototype / Pitch Edition • Prepared as an implementation specification</p>
+
+</main>
+</body>
+</html>
