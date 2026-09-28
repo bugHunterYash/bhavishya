@@ -59,6 +59,9 @@ model User {
   notifications    Notification[]
   communityMembers CommunityMember[]
   communityPosts   CommunityPost[]
+  communityReplies CommunityReply[]
+  communityReactions CommunityReaction[]
+  communityPollVotes CommunityPollVote[]
   auditLogs        AuditLog[]
   requestedTickets SupportTicket[] @relation("TicketRequester")
   assignedTickets  SupportTicket[] @relation("TicketAssignee")
@@ -410,8 +413,14 @@ model CommunityPost {
   title       String
   body        String
   status      String?   // OPEN, UNDER_REVIEW, RESOLVED (for issues)
+  isPinned    Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  replies     CommunityReply[]
+  reactions   CommunityReaction[]
+  polls       CommunityPoll[]
+  attachments CommunityAttachment[]
 }
 
 model AuditLog {
@@ -488,5 +497,76 @@ model SupportTicketEvent {
   oldValue       String?
   newValue       String?
   createdAt      DateTime @default(now())
+}
+
+
+model CommunityReply {
+  id          String   @id @default(cuid())
+  postId      String
+  post        CommunityPost @relation(fields: [postId], references: [id])
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  body        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  attachments CommunityAttachment[]
+}
+
+model CommunityReaction {
+  id           String   @id @default(cuid())
+  postId       String
+  post         CommunityPost @relation(fields: [postId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  reactionType String   // LIKE, HELPFUL
+  createdAt    DateTime @default(now())
+  
+  @@unique([postId, userId, reactionType])
+}
+
+model CommunityPoll {
+  id        String   @id @default(cuid())
+  postId    String
+  post      CommunityPost @relation(fields: [postId], references: [id])
+  question  String
+  createdAt DateTime @default(now())
+  
+  options   CommunityPollOption[]
+  votes     CommunityPollVote[]
+}
+
+model CommunityPollOption {
+  id      String   @id @default(cuid())
+  pollId  String
+  poll    CommunityPoll @relation(fields: [pollId], references: [id])
+  label   String
+  
+  votes   CommunityPollVote[]
+}
+
+model CommunityPollVote {
+  id        String   @id @default(cuid())
+  pollId    String
+  poll      CommunityPoll @relation(fields: [pollId], references: [id])
+  optionId  String
+  option    CommunityPollOption @relation(fields: [optionId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  
+  @@unique([pollId, userId])
+}
+
+model CommunityAttachment {
+  id           String   @id @default(cuid())
+  communityId  String?
+  postId       String?
+  post         CommunityPost? @relation(fields: [postId], references: [id])
+  replyId      String?
+  reply        CommunityReply? @relation(fields: [replyId], references: [id])
+  fileUrl      String
+  fileType     String
+  fileSize     Int
+  createdAt    DateTime @default(now())
 }
 
