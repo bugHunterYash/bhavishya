@@ -38,6 +38,7 @@ model School {
   notifications         Notification[]
   communities           Community[]
   auditLogs             AuditLog[]
+  supportTickets        SupportTicket[]
 }
 
 model User {
@@ -59,6 +60,10 @@ model User {
   communityMembers CommunityMember[]
   communityPosts   CommunityPost[]
   auditLogs        AuditLog[]
+  requestedTickets SupportTicket[] @relation("TicketRequester")
+  assignedTickets  SupportTicket[] @relation("TicketAssignee")
+  ticketMessages   SupportTicketMessage[]
+  ticketEvents     SupportTicketEvent[]
 }
 
 
@@ -86,6 +91,7 @@ model Student {
   schoolEvents          SchoolEvent[]
   busEvents             BusEvent[]
   cafeteriaTransactions CafeteriaTransaction[]
+  supportTickets        SupportTicket[]
 
   @@unique([schoolId, admissionNo])
 }
@@ -419,3 +425,68 @@ model AuditLog {
   entityId   String
   timestamp  DateTime @default(now())
 }
+
+model SupportCategory {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  
+  tickets     SupportTicket[]
+}
+
+model SupportTicket {
+  id             String   @id @default(cuid())
+  ticketNumber   String   @unique
+  schoolId       String
+  school         School   @relation(fields: [schoolId], references: [id])
+  requesterId    String
+  requester      User     @relation(name: "TicketRequester", fields: [requesterId], references: [id])
+  studentId      String?
+  student        Student? @relation(fields: [studentId], references: [id])
+  categoryId     String
+  category       SupportCategory @relation(fields: [categoryId], references: [id])
+  subject        String
+  description    String
+  priority       String   // LOW, NORMAL, HIGH, URGENT
+  status         String   // OPEN, TRIAGED, ASSIGNED, IN_PROGRESS, WAITING_FOR_USER, RESOLVED, CLOSED, REOPENED
+  assignedToId   String?
+  assignedTo     User?    @relation(name: "TicketAssignee", fields: [assignedToId], references: [id])
+  
+  slaDueAt       DateTime?
+  resolutionSummary String?
+  reopenCount    Int      @default(0)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  resolvedAt     DateTime?
+  closedAt       DateTime?
+
+  messages       SupportTicketMessage[]
+  events         SupportTicketEvent[]
+}
+
+model SupportTicketMessage {
+  id             String   @id @default(cuid())
+  ticketId       String
+  ticket         SupportTicket @relation(fields: [ticketId], references: [id])
+  authorId       String
+  author         User     @relation(fields: [authorId], references: [id])
+  body           String
+  isInternalNote Boolean  @default(false)
+  attachments    String?  // JSON string of URLs
+  createdAt      DateTime @default(now())
+}
+
+model SupportTicketEvent {
+  id             String   @id @default(cuid())
+  ticketId       String
+  ticket         SupportTicket @relation(fields: [ticketId], references: [id])
+  actorId        String
+  actor          User     @relation(fields: [actorId], references: [id])
+  action         String
+  oldValue       String?
+  newValue       String?
+  createdAt      DateTime @default(now())
+}
+

@@ -37,6 +37,9 @@ export default function SidebarClient({ email }: { email: string }) {
         <Link href="/parent/community" className={`nav-link ${pathname === '/parent/community' ? 'active' : ''}`}>
           <MessageSquare size={18} className="nav-icon" /> Community
         </Link>
+        <Link href="/parent/support" className={`nav-link ${pathname === '/parent/support' ? 'active' : ''}`}>
+          <MessageSquare size={18} className="nav-icon" /> Support
+        </Link>
       </nav>
 
       <div style={{ borderTop: '1px solid var(--line)', paddingTop: '24px', marginTop: '24px' }}>
