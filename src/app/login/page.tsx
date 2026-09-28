@@ -170,9 +170,9 @@ export default function LoginPage() {
 
       {/* RIGHT SIDE: Login Form (40%) */}
       <div 
+        className="login-right-side"
         style={{ 
           flex: '4', 
-          minWidth: '450px',
           maxWidth: '600px', 
           background: '#ffffff', 
           display: 'flex', 
@@ -188,7 +188,7 @@ export default function LoginPage() {
         </div>
 
         {/* Scrollable Form Content */}
-        <div style={{ padding: '0 64px 48px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="login-scroll-content" style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
           
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <img src="/logo.png" alt="Logo" style={{ height: '40px', margin: '0 auto 24px' }} />
@@ -356,6 +356,12 @@ export default function LoginPage() {
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 900px) {
           .hidden-mobile { display: none !important; }
+          .login-right-side { min-width: 100% !important; flex: 1 !important; }
+          .login-scroll-content { padding: 0 24px 32px !important; }
+        }
+        @media (min-width: 901px) {
+          .login-right-side { min-width: 450px; }
+          .login-scroll-content { padding: 0 64px 48px; }
         }
       `}} />
     </div>
